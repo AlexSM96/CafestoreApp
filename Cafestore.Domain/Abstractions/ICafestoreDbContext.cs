@@ -6,5 +6,5 @@ public interface ICafestoreDbContext
 
     public DbSet<OrderEntity> Orders { get; set; }
 
-    public Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+    public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
