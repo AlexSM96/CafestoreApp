@@ -1,6 +1,4 @@
-﻿using Cafestore.Domain.Models.Mappers;
-
-namespace Cafestore.Domain.Services;
+﻿namespace Cafestore.Domain.Services;
 
 public class AssortmentService(ICafestoreDbContext context) : IAssortmentService
 {
@@ -18,7 +16,13 @@ public class AssortmentService(ICafestoreDbContext context) : IAssortmentService
     {
         if (string.IsNullOrWhiteSpace(name))
         {
-            throw new ArgumentNullException(nameof(name));
+            throw new InvalidOperationException("Название прожукта из ассортимента не должно быть пустым");
+        }
+
+        var existedEntity = await _context.AssortmentItems.FirstOrDefaultAsync(e => e.Name == name);
+        if(existedEntity is not null)
+        {
+           throw new AlreadyExistsException(name);
         }
 
         var assortmentItem = new AssortmentItemEntity()
@@ -34,8 +38,13 @@ public class AssortmentService(ICafestoreDbContext context) : IAssortmentService
 
     public async Task DeleteAssortmentItem(long itemId)
     {
-         await _context.AssortmentItems
-            .Where(entity => entity.Id == itemId)
-            .ExecuteDeleteAsync();
+        var itemToDelete = await _context.AssortmentItems.FindAsync(itemId);
+        if (itemToDelete is null)
+        {
+            throw new EntityNotFoundException($"Сущность {nameof(AssortmentItemEntity)} с Id {itemId} не существует");
+        }
+
+        _context.AssortmentItems.Remove(itemToDelete);
+        await _context.SaveChangesAsync();
     }
 }

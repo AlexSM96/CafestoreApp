@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Cafestore.Domain\Cafestore.Domain.csproj" />
+    <ProjectReference Include="..\Cafestore.Persistance\Cafestore.Persistance.csproj" />
   </ItemGroup>
 
 </Project>

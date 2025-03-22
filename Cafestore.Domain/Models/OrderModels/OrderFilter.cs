@@ -2,5 +2,5 @@
 
 public class OrderFilter
 {
-    public OrderStatus OrderStatus { get; set; }
+    public OrderStatus? OrderStatus { get; set; }
 }

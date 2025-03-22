@@ -1,5 +1,4 @@
-﻿
-using Cafestore.Domain.Models.Mappers;
+﻿using Cafestore.Domain.Extensions;
 
 namespace Cafestore.Domain.Services;
 
@@ -11,7 +10,8 @@ public class OrderService(ICafestoreDbContext context) : IOrderService
     {
         return await _context.Orders
             .AsNoTracking()
-            .Select(e => e.ToDto())
+            .Filter(filter)
+            .Select(order => order.ToDto())
             .ToListAsync();
     }
 
@@ -22,16 +22,22 @@ public class OrderService(ICafestoreDbContext context) : IOrderService
             throw new ArgumentNullException(nameof(orderDto));
         }
 
-
         if(orderDto.Products == null || !orderDto.Products.Any())
         {
-            throw new InvalidOperationException("В заказе отсутсвуеют товары");
+            throw new EmptyOrderException("В заказе отсутсвуеют товары");
         }
 
+        foreach (var item in orderDto.Products)
+        {
+            if(!await _context.AssortmentItems.AnyAsync(x => x.Name == item.Name))
+            {
+                throw new EntityNotFoundException("В ассортименте отсутствуют товары из заказа");
+            }
+        }
+        
         var addResult = await _context.Orders.AddAsync(orderDto.ToEntity());
         await _context.SaveChangesAsync();
 
         return addResult.Entity.ToDto();
     }
-
 }

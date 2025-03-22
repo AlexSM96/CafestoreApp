@@ -6,3 +6,7 @@ global using Microsoft.EntityFrameworkCore;
 global using Cafestore.Domain.Abstractions;
 global using Cafestore.Domain.Models.AssortmentModels;
 global using Cafestore.Domain.Models.OrderModels;
+global using Cafestore.Domain.Services;
+global using Microsoft.Extensions.DependencyInjection;
+global using Cafestore.Domain.Exceptions;
+global using Cafestore.Domain.Models.Mappers;
