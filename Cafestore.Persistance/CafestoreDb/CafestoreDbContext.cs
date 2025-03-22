@@ -1,12 +1,13 @@
 ﻿
 
+using Cafestore.Domain.Abstractions;
+
 namespace Cafestore.Persistance.CafestoreDb;
 
 public class CafestoreDbContext(DbContextOptions<CafestoreDbContext> contextOptions) 
-    : DbContext(contextOptions)
+    : DbContext(contextOptions), ICafestoreDbContext
 {
-
-    public DbSet<AssortmentItemEntity> AssormentItems { get; set; }
+    public DbSet<AssortmentItemEntity> AssortmentItems { get; set; }
 
     public DbSet<OrderEntity> Orders { get; set; } 
 
