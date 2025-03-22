@@ -9,7 +9,7 @@ public static class OrdersMapper
             ClientName = entity.ClientName,
             Status = entity.OrderStatus,
             PaymentType = entity.PaymentType,
-            Products = entity.Products?.ToListDto()  
+            OrderItems = entity.OrderItems?.ToListDto()  
         };
     }
 
@@ -20,7 +20,30 @@ public static class OrdersMapper
             ClientName = orderDto.ClientName,
             OrderStatus = orderDto.Status,
             PaymentType = orderDto.PaymentType,
-            Products = orderDto.Products?.ToListEntity()
+            OrderItems = orderDto.OrderItems?.ToListEntity()
+        };
+    }
+
+    public static UpdateOrderDto ToUpdateDto(this OrderEntity entity) 
+    {
+        return new UpdateOrderDto()
+        {
+            ClientName = entity.ClientName,
+            Status = entity.OrderStatus,
+            PaymentType = entity.PaymentType,
+            OrderItems = entity.OrderItems?.ToListDto()
+        };
+    }
+
+    public static OrderEntity ToEntity(this UpdateOrderDto updateOrderDto) 
+    {
+        return new OrderEntity()
+        {
+            ClientName = updateOrderDto.ClientName!,
+            OrderStatus = updateOrderDto.Status!.Value,
+            PaymentType = updateOrderDto.PaymentType!.Value,
+            UpdatedAt = DateTime.UtcNow,
+            OrderItems = updateOrderDto?.OrderItems!.ToListEntity()
         };
     }
 }

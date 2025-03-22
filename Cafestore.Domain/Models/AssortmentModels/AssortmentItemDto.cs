@@ -1,4 +1,4 @@
 ﻿namespace Cafestore.Domain.Models.AssortmentModels
 {
-    public record AssortmentItemDto(string Name);
+    public record AssortmentItemDto(long Id, string Name);
 }

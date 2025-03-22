@@ -6,6 +6,7 @@ public static class ServiceCollectionExtension
     {
         return services
             .AddScoped<IAssortmentService, AssortmentService>()
-            .AddScoped<IOrderService, OrderService>();
+            .AddScoped<IOrderService, OrderService>()
+            ;
     }
 }

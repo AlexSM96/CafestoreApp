@@ -1,4 +1,6 @@
-﻿namespace Cafestore.Domain.Models.OrderModels;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Cafestore.Domain.Models.OrderModels;
 
 public class CreateOrderDto : OrderDto
 {
@@ -7,7 +9,7 @@ public class CreateOrderDto : OrderDto
         ClientName = clientName;
         PaymentType = paymentType;
         Status = OrderStatus.AtWork;
-        Products = new List<AssortmentItemDto>();
+        OrderItems = new List<AssortmentItemDto>();
     }
 
     public override required string ClientName 
@@ -27,11 +29,16 @@ public class CreateOrderDto : OrderDto
 
 public class OrderDto
 {
+    [Required]
+    [MinLength(5)]
     public required virtual string ClientName { get; set; }
 
+    [Required]
     public required OrderStatus Status { get; set; }
 
+    [Required]
     public required PaymentType PaymentType { get; set; }
 
-    public IList<AssortmentItemDto>? Products { get; set; }
+
+    public IList<AssortmentItemDto>? OrderItems { get; set; }
 }

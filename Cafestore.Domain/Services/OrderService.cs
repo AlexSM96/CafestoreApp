@@ -1,6 +1,4 @@
-﻿using Cafestore.Domain.Extensions;
-
-namespace Cafestore.Domain.Services;
+﻿namespace Cafestore.Domain.Services;
 
 public class OrderService(ICafestoreDbContext context) : IOrderService
 {
@@ -10,6 +8,7 @@ public class OrderService(ICafestoreDbContext context) : IOrderService
     {
         return await _context.Orders
             .AsNoTracking()
+            .Include(order => order.OrderItems)
             .Filter(filter)
             .Select(order => order.ToDto())
             .ToListAsync();
@@ -22,12 +21,12 @@ public class OrderService(ICafestoreDbContext context) : IOrderService
             throw new ArgumentNullException(nameof(orderDto));
         }
 
-        if(orderDto.Products == null || !orderDto.Products.Any())
+        if(orderDto.OrderItems == null || !orderDto.OrderItems.Any())
         {
             throw new EmptyOrderException("В заказе отсутсвуеют товары");
         }
 
-        foreach (var item in orderDto.Products)
+        foreach (var item in orderDto.OrderItems)
         {
             if(!await _context.AssortmentItems.AnyAsync(x => x.Name == item.Name))
             {
@@ -39,5 +38,22 @@ public class OrderService(ICafestoreDbContext context) : IOrderService
         await _context.SaveChangesAsync();
 
         return addResult.Entity.ToDto();
+    }
+
+    public async Task<OrderDto> UpdateOrder(long orderId, JsonPatchDocument<UpdateOrderDto> patchOrderDto)
+    {
+        var order = await _context.Orders.FindAsync(patchOrderDto);
+        if (order is null)
+        {
+            throw new EntityNotFoundException($"Сущность {nameof(OrderEntity)} c Id {orderId} не существует");
+        }
+
+        var updatedDto = order.ToUpdateDto();
+        patchOrderDto.ApplyTo(updatedDto);
+
+        var updateResult = _context.Orders.Update(updatedDto.ToEntity());
+        await _context.SaveChangesAsync();
+
+        return updateResult.Entity.ToDto();
     }
 }

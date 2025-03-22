@@ -10,3 +10,5 @@ global using Cafestore.Domain.Services;
 global using Microsoft.Extensions.DependencyInjection;
 global using Cafestore.Domain.Exceptions;
 global using Cafestore.Domain.Models.Mappers;
+global using Microsoft.AspNetCore.JsonPatch;
+global using Cafestore.Domain.Extensions;

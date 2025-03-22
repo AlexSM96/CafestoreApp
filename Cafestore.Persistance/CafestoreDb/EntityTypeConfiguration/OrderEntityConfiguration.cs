@@ -13,7 +13,7 @@ internal class OrderEntityConfiguration : IEntityTypeConfiguration<OrderEntity>
             .IsUnique();
 
         builder
-            .HasMany(e => e.Products);
+            .HasMany(e => e.OrderItems);
 
         builder
             .Property(e => e.OrderStatus)

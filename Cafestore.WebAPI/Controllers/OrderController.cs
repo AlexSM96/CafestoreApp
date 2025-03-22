@@ -1,4 +1,6 @@
-﻿namespace Cafestore.WebAPI.Controllers;
+﻿using Microsoft.AspNetCore.JsonPatch;
+
+namespace Cafestore.WebAPI.Controllers;
 
 [Route("orders")]
 public class OrderController(IOrderService orderService) : ApiBaseContorller
@@ -15,7 +17,26 @@ public class OrderController(IOrderService orderService) : ApiBaseContorller
     [HttpPost("create")]
     public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto orderDto)
     {
-        var addResult = await _orderService.CreateOrder(orderDto);
-        return Ok(new { CreatedOrder = addResult });
+        if(!ModelState.IsValid) return BadRequest(ModelState);
+        var createdOrder = await _orderService.CreateOrder(orderDto);
+        if(createdOrder is null)
+        {
+            return Empty;
+        }
+
+        return Ok(new { CreatedOrder = createdOrder });
+    }
+
+    [HttpPatch("update")]
+    public async Task<IActionResult> UpdateOrder(long orderId, [FromBody] JsonPatchDocument<UpdateOrderDto> orderDto)
+    {
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+        var updatedOrder = await _orderService.UpdateOrder(orderId, orderDto);
+        if (updatedOrder is null) 
+        {
+            return Empty;
+        }
+
+        return Ok(new { UpdatedOrder = updatedOrder });
     }
 } 
