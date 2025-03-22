@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CafestoreDb\EntityTypeConfiguration\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Cafestore.Domain\Cafestore.Domain.csproj" />
   </ItemGroup>
 

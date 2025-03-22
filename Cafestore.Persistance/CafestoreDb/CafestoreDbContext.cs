@@ -1,4 +1,6 @@
-﻿namespace Cafestore.Persistance.CafestoreDb;
+﻿
+
+namespace Cafestore.Persistance.CafestoreDb;
 
 public class CafestoreDbContext(DbContextOptions<CafestoreDbContext> contextOptions) 
     : DbContext(contextOptions)
@@ -10,6 +12,10 @@ public class CafestoreDbContext(DbContextOptions<CafestoreDbContext> contextOpti
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder
+            .ApplyConfiguration(new AssortmentItemEntityConfiguration())
+            .ApplyConfiguration(new OrderEntityConfiguration());
+
         base.OnModelCreating(modelBuilder);
     }
 }
