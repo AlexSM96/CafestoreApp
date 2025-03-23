@@ -1,5 +1,4 @@
-﻿
-namespace Cafestore.Persistance.CafestoreDb.EntityTypeConfiguration;
+﻿namespace Cafestore.Persistance.CafestoreDb.EntityTypeConfiguration;
 
 internal class OrderEntityConfiguration : IEntityTypeConfiguration<OrderEntity>
 {
@@ -11,9 +10,6 @@ internal class OrderEntityConfiguration : IEntityTypeConfiguration<OrderEntity>
         builder
             .HasIndex(e => e.Id)
             .IsUnique();
-
-        builder
-            .HasMany(e => e.OrderItems);
 
         builder
             .Property(e => e.OrderStatus)

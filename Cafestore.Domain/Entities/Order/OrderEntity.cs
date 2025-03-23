@@ -8,5 +8,5 @@ public class OrderEntity : BaseEntity
 
     public required OrderStatus OrderStatus { get; set; }
 
-    public IList<AssortmentItemEntity>? OrderItems { get; set; }   
+    public IList<AssortmentItemEntity> OrderItems { get; set; } = [];
 }

@@ -1,4 +1,8 @@
-﻿namespace Cafestore.Domain.Models.AssortmentModels
+﻿namespace Cafestore.Domain.Models.AssortmentModels;
+
+public class AssortmentItemDto : CreateAssortmentItem
 {
-    public record AssortmentItemDto(long Id, string Name);
+    public long Id { get; set; }
+
+    public DateTime CreatedAt { get; set; }
 }

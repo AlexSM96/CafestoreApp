@@ -13,15 +13,16 @@ public class AssortmentController(IAssortmentService assortmentService) : ApiBas
     }
 
     [HttpPost("add")]
-    public async Task<IActionResult> AddAssortmentItem([FromBody] AssortmentItemDto assortmentItem)
+    public async Task<IActionResult> AddAssortmentItem([FromBody] CreateAssortmentItem assortmentItem)
     {
-        var newAsortmentItem = await _assortmentService.AddAssortmentItem(assortmentItem.Name);
+        if(!ModelState.IsValid) return BadRequest(ModelState);
+        var newAsortmentItem = await _assortmentService.AddAssortmentItem(assortmentItem);
         if(newAsortmentItem is null)
         {
             return Empty;
         }
 
-        return Ok(new { AssortmentItem = newAsortmentItem });
+        return Ok(new { NewAssortmentItem = newAsortmentItem });
     }
 
     [HttpDelete("delete")]

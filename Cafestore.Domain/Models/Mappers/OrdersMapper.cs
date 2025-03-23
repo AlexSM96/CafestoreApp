@@ -9,7 +9,8 @@ public static class OrdersMapper
             ClientName = entity.ClientName,
             Status = entity.OrderStatus,
             PaymentType = entity.PaymentType,
-            OrderItems = entity.OrderItems?.ToListDto()  
+            CreatedAt = entity.CreatedAt,
+            OrderItems = entity.OrderItems.ToListDto()  
         };
     }
 
@@ -17,10 +18,21 @@ public static class OrdersMapper
     {
         return new OrderEntity()
         {
-            ClientName = orderDto.ClientName,
-            OrderStatus = orderDto.Status,
+            ClientName = orderDto.ClientName!,
+            OrderStatus = orderDto.Status!.Value,
+            PaymentType = orderDto.PaymentType!.Value,
+            OrderItems = orderDto.OrderItems.ToListEntity()
+        };
+    }
+
+    public static OrderEntity ToEntity(this CreateOrderDto orderDto, IEnumerable<AssortmentItemEntity> assortmentItems)
+    {
+        return new OrderEntity()
+        {
+            ClientName = orderDto.ClientName!,
+            OrderStatus = OrderStatus.AtWork,
             PaymentType = orderDto.PaymentType,
-            OrderItems = orderDto.OrderItems?.ToListEntity()
+            OrderItems = assortmentItems.ToList()
         };
     }
 
@@ -31,19 +43,9 @@ public static class OrdersMapper
             ClientName = entity.ClientName,
             Status = entity.OrderStatus,
             PaymentType = entity.PaymentType,
-            OrderItems = entity.OrderItems?.ToListDto()
-        };
-    }
-
-    public static OrderEntity ToEntity(this UpdateOrderDto updateOrderDto) 
-    {
-        return new OrderEntity()
-        {
-            ClientName = updateOrderDto.ClientName!,
-            OrderStatus = updateOrderDto.Status!.Value,
-            PaymentType = updateOrderDto.PaymentType!.Value,
-            UpdatedAt = DateTime.UtcNow,
-            OrderItems = updateOrderDto?.OrderItems!.ToListEntity()
+            OrderItems = entity.OrderItems
+                .Select(e => new AssortmentItemIdDto() { Id = entity.Id })
+                .ToList(), 
         };
     }
 }

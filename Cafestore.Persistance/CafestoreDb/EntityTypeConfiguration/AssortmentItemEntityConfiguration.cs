@@ -14,5 +14,9 @@ internal class AssortmentItemEntityConfiguration : IEntityTypeConfiguration<Asso
         builder
             .HasIndex(e => e.Name)
             .IsUnique();
+
+        builder
+            .HasMany(e => e.Orders)
+            .WithMany(x => x.OrderItems);
     }
 }

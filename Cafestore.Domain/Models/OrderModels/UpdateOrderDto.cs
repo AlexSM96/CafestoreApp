@@ -8,5 +8,5 @@ public class UpdateOrderDto
 
     public PaymentType? PaymentType { get; set; }
 
-    public IList<AssortmentItemDto>? OrderItems { get; set; }
+    public IList<AssortmentItemIdDto> OrderItems { get; set; } = [];
 }

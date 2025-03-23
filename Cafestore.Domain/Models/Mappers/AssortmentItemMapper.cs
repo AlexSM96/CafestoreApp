@@ -3,7 +3,12 @@
 public static class AssortmentItemMapper
 {
     public static AssortmentItemDto ToDto(this AssortmentItemEntity entity) => 
-        new AssortmentItemDto(entity.Id, entity.Name);
+        new AssortmentItemDto 
+        { 
+            Id = entity.Id,
+            Name = entity.Name, 
+            CreatedAt = entity.CreatedAt
+        };
     
     public static IList<AssortmentItemDto> ToListDto(this IEnumerable<AssortmentItemEntity> entities) =>
         entities

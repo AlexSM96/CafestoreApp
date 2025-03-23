@@ -12,3 +12,4 @@ global using Cafestore.Domain.Exceptions;
 global using Cafestore.Domain.Models.Mappers;
 global using Microsoft.AspNetCore.JsonPatch;
 global using Cafestore.Domain.Extensions;
+global using System.ComponentModel.DataAnnotations;

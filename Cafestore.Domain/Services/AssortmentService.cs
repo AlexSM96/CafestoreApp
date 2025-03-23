@@ -12,25 +12,25 @@ public class AssortmentService(ICafestoreDbContext context) : IAssortmentService
             .ToListAsync();
     }
 
-    public async Task<AssortmentItemDto> AddAssortmentItem(string name)
+    public async Task<AssortmentItemDto> AddAssortmentItem(CreateAssortmentItem assortmentItem)
     {
-        if (string.IsNullOrWhiteSpace(name))
+        if (assortmentItem is null || string.IsNullOrWhiteSpace(assortmentItem.Name))
         {
-            throw new InvalidOperationException("Название прожукта из ассортимента не должно быть пустым");
+            throw new InvalidOperationException("Название продукта из ассортимента не должно быть пустым");
         }
 
-        var existedEntity = await _context.AssortmentItems.FirstOrDefaultAsync(e => e.Name == name);
+        var existedEntity = await _context.AssortmentItems.FirstOrDefaultAsync(e => e.Name == assortmentItem.Name);
         if(existedEntity is not null)
         {
-           throw new AlreadyExistsException(name);
+           throw new AlreadyExistsException(assortmentItem.Name);
         }
 
-        var assortmentItem = new AssortmentItemEntity()
+        var entity = new AssortmentItemEntity()
         {
-            Name = name
+            Name = assortmentItem.Name,
         };
 
-        var addResult = await _context.AssortmentItems.AddAsync(assortmentItem);
+        var addResult = await _context.AssortmentItems.AddAsync(entity);
         await _context.SaveChangesAsync();
 
         return addResult.Entity.ToDto();
