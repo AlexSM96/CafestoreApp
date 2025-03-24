@@ -44,6 +44,12 @@ public class OrderService(ICafestoreDbContext context) : IOrderService
             throw new EntityNotFoundException($"Сущность {nameof(OrderEntity)} c Id {orderId} не существует");
         }
 
+        if (order.OrderStatus != OrderStatus.AtWork 
+            && patchOrderDto.Operations.Any(x => x.path.ToLower().Contains(nameof(order.OrderItems).ToLower())))
+        {
+            throw new InvalidOperationException("Изменение товаров доступно только для заказов которые находятся в работе");
+        }
+
         var updatedDto = order.ToUpdateDto();
         patchOrderDto.ApplyTo(updatedDto);
 
@@ -67,6 +73,7 @@ public class OrderService(ICafestoreDbContext context) : IOrderService
         order.PaymentType = updatedDto.PaymentType!.Value;
         order.OrderStatus = updatedDto.Status!.Value;
         order.UpdatedAt = DateTime.UtcNow;
+    
         order.OrderItems = assortmentItems.ToList();
 
         var updateResult = _context.Orders.Update(order);
