@@ -1,6 +1,4 @@
-﻿using System.Threading;
-
-namespace Cafestore.Domain.Services;
+﻿namespace Cafestore.Domain.Services;
 
 public class OrderService(ICafestoreDbContext context) : IOrderService
 {

@@ -22,7 +22,7 @@ public class AssortmentService(ICafestoreDbContext context) : IAssortmentService
         var existedEntity = await _context.AssortmentItems.FirstOrDefaultAsync(e => e.Name == assortmentItem.Name);
         if(existedEntity is not null)
         {
-           throw new AlreadyExistsException(assortmentItem.Name);
+           throw new AlreadyExistsException($"Сущность с названием: {assortmentItem.Name} уже существует");
         }
 
         var entity = new AssortmentItemEntity()
@@ -32,7 +32,7 @@ public class AssortmentService(ICafestoreDbContext context) : IAssortmentService
 
         var addResult = await _context.AssortmentItems.AddAsync(entity);
         await _context.SaveChangesAsync();
-
+       
         return addResult.Entity.ToDto();
     }
 

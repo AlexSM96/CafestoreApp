@@ -4,7 +4,7 @@ public class OrderEntity : BaseEntity
 {
     public required string ClientName { get; set; }
 
-    public required PaymentType PaymentType { get; set; }
+    public PaymentType? PaymentType { get; set; }
 
     public required OrderStatus OrderStatus { get; set; }
 
